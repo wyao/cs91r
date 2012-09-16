@@ -1,0 +1,76 @@
+Terminology:
+Sample Size: Number of unique numbers
+Lookup Size: Number of lookups
+Sample Range: Set of all possible numbers for both sample and lookup 
+    (eg 100 would indicate that the set range(100)). High sample range indicates
+    high miss rate
+Iterations: Number of iterations that each lookup was tested for timing
+
+
+For all the tests, we tested at sample size intervals of:
+    5 10 20 50 100 200 500 1000 5000 10000
+
+
+
+*** Summary of results ***
+varyN.txt (Sample: N, Lookup: N, Range: 2N)
+    The ordered runtime starts with:
+            hash table, unordered list, ordered list, rbTree
+        but switches over at N > 200 to:
+            hash table, ordered list, rbTree, unordered list
+
+    Hash table is barely faster than ordered list at very small N.
+
+    The order of magnitude difference at N=10000 is representative:
+        0.00342059135437 0.10683259964 0.126965999603 4.58418016434
+
+lowMissRate.txt (Sample: N, Lookup: N, Range: N)
+    The ordered runtime starts with:
+            hash table, unordered list, ordered list, rbTree
+        but switches over at N > 100 to:
+            hash table, ordered list, rbTree, unordered list
+        So when the miss rate is lower, rbTree overtakes unordered list much quicker.
+
+highMissRate.txt (Sample: N, Lookup: N, Range: 10N)
+    Interestingly, the results are more similar to the lowMissRate test than the
+        varyN test.
+
+fewLookups.txt (Sample: N, Lookup: N/5, Range: 2N)
+    For N<200:
+        hash table, unordered list, ordered list, rbTree
+    N=200:
+        hash table, ordered list, unordered list, rbTree
+    N>200:
+        hash table, ordered list, rbTree, unordered list
+
+
+When lookups are high, unordered lists perform more poorly. Otherwise they might
+    get lucky.
+
+Clearly, Python dictionaries are really fast.
+
+
+
+*** Custom Tests ***
+
+I also tried some custom tests to see when unordered lists are faster than hash tables.
+I was unable to create a senario in which ordered lists were faster than hash tables.
+
+python ps1.py -n1 -m1 -r1 -i100
+Sample Size: 1  Lookup Size:  1  Sample Range: 1  Iterations: 100
+unordered list, hash table, ordered list, rbTree,
+2.59876251221e-07 3.00407409668e-07 9.41753387451e-07 3.80992889404e-06
+
+---
+
+Unordered lists faster:
+python ps1.py -n3 -m1 -r100 -i100
+Sample Size: 3  Lookup Size:  1  Sample Range: 100  Iterations: 100
+unordered list, hash table, ordered list, rbTree,
+1.46794319153e-05 1.55806541443e-05 0.000112159252167 0.000354268550873
+
+Hash table faster:
+python ps1.py -n4 -m1 -r100 -i100
+Sample Size: 4  Lookup Size:  1  Sample Range: 100  Iterations: 100
+hash table, unordered list, ordered list, rbTree,
+1.64103507996e-05 1.72400474548e-05 0.000151491165161 0.000374970436096

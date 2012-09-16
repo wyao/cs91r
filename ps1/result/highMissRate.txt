@@ -1,0 +1,30 @@
+Sample Size: 5  Lookup Size:  5  Sample Range: 50  Iterations: 5
+hash table, unordered list, ordered list, rbTree,
+8.20159912109e-06 1.03950500488e-05 7.04288482666e-05 0.000180387496948
+Sample Size: 10  Lookup Size:  10  Sample Range: 100  Iterations: 5
+hash table, unordered list, ordered list, rbTree,
+1.57833099365e-05 3.16143035889e-05 0.000197601318359 0.000409030914307
+Sample Size: 20  Lookup Size:  20  Sample Range: 200  Iterations: 5
+hash table, unordered list, ordered list, rbTree,
+4.03881072998e-05 0.000133562088013 0.000513601303101 0.000986003875732
+Sample Size: 50  Lookup Size:  50  Sample Range: 500  Iterations: 5
+hash table, unordered list, ordered list, rbTree,
+7.70092010498e-05 0.000601387023926 0.00126881599426 0.00227279663086
+Sample Size: 100  Lookup Size:  100  Sample Range: 1000  Iterations: 5
+hash table, unordered list, ordered list, rbTree,
+0.000159978866577 0.00231938362122 0.00276141166687 0.00488862991333
+Sample Size: 200  Lookup Size:  200  Sample Range: 2000  Iterations: 5
+hash table, ordered list, rbTree, unordered list,
+0.000314807891846 0.00644659996033 0.00980000495911 0.00999116897583
+Sample Size: 500  Lookup Size:  500  Sample Range: 5000  Iterations: 5
+hash table, ordered list, rbTree, unordered list,
+0.000849199295044 0.0181851863861 0.030323600769 0.0569799900055
+Sample Size: 1000  Lookup Size:  1000  Sample Range: 10000  Iterations: 5
+hash table, ordered list, rbTree, unordered list,
+0.00165162086487 0.0402724266052 0.0622586250305 0.24103717804
+Sample Size: 5000  Lookup Size:  5000  Sample Range: 50000  Iterations: 5
+hash table, ordered list, rbTree, unordered list,
+0.0091028213501 0.235410404205 0.327595186234 6.19849061966
+Sample Size: 10000  Lookup Size:  10000  Sample Range: 100000  Iterations: 5
+hash table, ordered list, rbTree, unordered list,
+0.0178205966949 0.549771642685 0.71119055748 24.0254429817

@@ -1,0 +1,73 @@
+I think Part 1 should take no more than 30 minutes and if you team up, Part 2 should be only a couple of hours.  If you do Part 2 individually,
+I'm hoping you can code something up in 1-2 hours and then spend an hour or so playing with data sets, to get a feel for the performance.  I
+will not ask you to hand in code, but will expect that you can discuss what you discovered. (For Part 2, be sure to jot down the processor you
+used, the amount of memory you have, the OS, and the language.)
+
+Learning objective
+      Be able to articulate why persistent data management is hard -- why it's more than just data structures.
+
+      Be able to explain when a database solution is/is not necessary.
+
+Collaboration policy:
+      You may work together on any/all parts of this, but you must work *together*.  You may not simply split up part 1 and part 2
+      and have each person do one part.  When we meet, I'll expect that each of you can talk about what you think/found out.
+
+Part 1:
+      At its core, data management is all about finding things quickly.
+
+      You have all studied data structures of various types: lists, hash tables, trees, etc that let you find things quickly.
+      I am assuming you all know the basics of how a disk works (if not, let me know and I can offer some readings).
+
+      Make a list of approximately 5 things that make mapping data structures onto disk challenging -- that is, why is there a
+      field of data management at all?  Once you know about data structures, why can't you just write them to disk?
+
+      You should have at least 5 things, but feel free to list more if you can't stop yourself.
+
+      Now, for each thing you listed above: propose a technique to address it.  Don't design anything huge and fancy, just
+      jot down an idea.
+
+      For example:
+              Challenge: Data structures typically assume that all your data fits in memory, but a data set might be too big.
+              Proposed approach: Keep only some of the data in memory and leave the rest on disk
+
+      (You can't use that example ;-)
+
+Part 2: When does it make sense to use  a database?
+
+      If your data set is very small, you might find that a traditional data management solution actually makes things slower
+      instead of faster!  How can that be?
+
+      Write a program that does (at least) two things:
+
+              A: Accepts a variable number of items (let's just use integers for now; you can generate random ones) and then
+              stores them using two different approaches:
+
+                      1. Store them as they come in (unordered).
+                      2. Stores them in some clever data structure (an ordered list/array, a tree, a hash table, etc) -- if you want to use
+                              a library implementation of the clever data structure, you are welcome to do so.
+
+              B: Looks up N random items (you'll need to set N so that you can run sufficiently many tests to get stable results)
+                      For the first case, you'll simply have to do a full linear search; in the other case, you'll ideally do something more
+                      clever/efficient.
+
+      In this exercise, all your data will be in memory.
+
+      Now, what you are going to do is see how many items you need to have before the benefit of a smart data structure (B)
+      outweighs the cost of maintaining a smart data structure.  FOr example, if you have only one item, then the unordered array
+      is simpler and faster.  If you have a gazillion items, then the unordered array will be simpler but slower.  The question you're
+      trying to answer is, when does the smart structure help.
+
+      You can use any language you want (your answer will undoubtedly be language dependent, but that's OK).
+
+      You should be careful about your timing: in a perfect world, you'd like to avoid including the time for the random number
+      generator, so you might generate the numbers first, put them in a file, read the file into memory and then start timing, or
+      some other thing.
+
+      You'll probably want to collect timings for the "store all the items" and "find all the items" separately, because there is
+      data structure overhead in writing the elements, but there is also data structure overhead in reading the elements.
+
+      You are welcome to work together and, for example, each construct one of the different implementations (in fact, if the three
+      of you want to get together and do a single un-ordered implementation and two ordered implementations, that would be fine).
+
+      The educational part here is in running the experiments, making sure your data is meaningful and then thinking about
+      what the results are telling you.
