@@ -1,0 +1,13 @@
+For this part, I'd like you to work together and have each person select a different data management solution.
+I'd like you to redo Part 2 of the last assignment, but this time, focus on out of core data. Here's the deal:
+
+We're going to focus on simple keyed lookup. This time, let's use slightly more challenging keys: random strings of length 10 (that is, you can generate 10 random characters in the range 'a' through 'z'). You may optionally nul-terminate them if it makes your life easier.
+Your goal is to figure out how many items it takes before doing a keyed lookup in a database is faster than reading all your data from a flat file and iterating over them.
+Before you do anything else, commit to a guess: How many items do you think you need to store before the database wins? You'll need to make some assumptions in order to made an educated guess; state your assumptions.
+Select a persistent data manager, such as MySQL, PostgreSQL, SQLite, Berkeley DB, MongoDB, etc. One of you will do the flat file implementation and the rest of you should choose a system with which you're familiar.
+Your task is to compare the performance of the flat file implementation (linear search) with the database implementation for the operation "find this key." You don't actually have to return any data, but here's a hint: if you store a data value with each key and you can use that data value to ensure that you've actually retrieved the correct key, this will help in your debugging. For example, I often use keys and reverse keys, so that if I look up 'cat', I know that I should get the data value 'tac' back.
+Think about the following questions (i.e., be ready to talk about them):
+How long did it take to load the data into each system? (You might actually construct a graph of time versus number of items?)
+How does the answer to the previous question affect how you think about designing a solution to a data management problem?
+Knowing only what you know now, if someone asked you to design a data management solution, what five questions must you ask them before you do anything else?
+Other than performance, why might you choose to use a data management system instead of a flat file?
