@@ -1,0 +1,280 @@
+1. In which movies did Tom Cruise act?
+mysql> select id from Person where name = "Tom Cruise";
+mysql> select movie_id from Actor where actor_id = '0000129';
+mysql> select Movie.name from Movie, Actor where Actor.movie_id = Movie.id and Actor.actor_id = '0000129';
++----------------------------------------------------+
+| name                                               |
++----------------------------------------------------+
+| Top Gun                                            |
+| Rain Man                                           |
+| A Few Good Men                                     |
+| The Firm                                           |
+| Interview with the Vampire: The Vampire Chronicles |
+| Jerry Maguire                                      |
+| Mission: Impossible                                |
+| Mission: Impossible II                             |
+| Minority Report                                    |
+| Vanilla Sky                                        |
+| Mission: Impossible III                            |
+| The Last Samurai                                   |
+| Collateral                                         |
+| War of the Worlds                                  |
++----------------------------------------------------+
+
+
+2. What is the average running length of movies in each year?
+mysql> select year,AVG(runtime) from Movie group by year;
++------+--------------+
+| year | AVG(runtime) |
++------+--------------+
+| 1937 |      83.0000 |
+| 1939 |     238.0000 |
+| 1942 |      70.0000 |
+| 1961 |      79.0000 |
+| 1964 |     139.0000 |
+| 1965 |     185.5000 |
+| 1967 |      91.5000 |
+| 1969 |     110.0000 |
+| 1970 |     118.0000 |
+| 1972 |     175.0000 |
+| 1973 |     120.3333 |
+| 1974 |     129.0000 |
+| 1975 |     119.0000 |
+| 1976 |     119.0000 |
+| 1977 |     116.3333 |
+| 1978 |     117.6000 |
+| 1979 |     105.0000 |
+| 1980 |     117.2500 |
+| 1981 |     112.0000 |
+| 1982 |     109.6000 |
+| 1983 |     133.0000 |
+| 1984 |     108.5000 |
+| 1985 |     101.0000 |
+| 1986 |     111.0000 |
+| 1987 |     110.5000 |
+| 1988 |     111.6667 |
+| 1989 |     107.5000 |
+| 1990 |     121.8889 |
+| 1991 |     117.0000 |
+| 1992 |     118.3636 |
+| 1993 |     128.3750 |
+| 1994 |     119.0833 |
+| 1995 |     110.5000 |
+| 1996 |     118.0667 |
+| 1997 |     124.0000 |
+| 1998 |     113.8889 |
+| 1999 |     111.7143 |
+| 2000 |     117.3636 |
+| 2001 |     119.6000 |
+| 2002 |     116.2083 |
+| 2003 |     115.9655 |
+| 2004 |     118.6667 |
+| 2005 |     119.4211 |
+| 2006 |     118.2000 |
+| 2007 |     112.8571 |
+| 2008 |     111.9667 |
+| 2009 |     117.6667 |
++------+--------------+
+
+
+3. In which years was the average running length of movies greater than 2 hours?
+mysql> select * from (select year,AVG(runtime) as average from Movie group by year) as _ where average > 120;
++------+----------+
+| year | average  |
++------+----------+
+| 1939 | 238.0000 |
+| 1964 | 139.0000 |
+| 1965 | 185.5000 |
+| 1972 | 175.0000 |
+| 1973 | 120.3333 |
+| 1974 | 129.0000 |
+| 1983 | 133.0000 |
+| 1990 | 121.8889 |
+| 1993 | 128.3750 |
+| 1997 | 124.0000 |
++------+----------+
+10 rows in set (0.00 sec)
+
+
+4. What is the average running length of a movie that wins the Best Movie Oscar?
+mysql> select AVG(Movie.runtime) from Movie, Oscar where Oscar.movie_id = Movie.id;
++--------------------+
+| AVG(Movie.runtime) |
++--------------------+
+|           138.4000 |
++--------------------+
+
+
+5. Which people (actors, actresses, and directors) were involved in producing "Avatar"?
+mysql> select id from Movie where name='Avatar';
+mysql> select Person.name from Movie, Actor, Person where Movie.id=Actor.movie_id and Person.id=Actor.actor_id and Movie.name='Avatar'; 
++------------------+
+| name             |
++------------------+
+| Sigourney Weaver |
+| Stephen Lang     |
+| Joel Moore       |
+| Zoe Saldana      |
+| Sam Worthington  |
++------------------+
+mysql> select Person.name from Movie, Director, Person where Movie.id=Director.movie_id and Person.id=Director.director_id and Movie.name='Avatar';
++---------------+
+| name          |
++---------------+
+| James Cameron |
++---------------+
+
+
+6. Which actors and actresses acted in both "Avatar" and "Terminator Salvation"?
+mysql> select a.name from
+    ( select Person.name as name from Movie, Director, Person 
+        where Movie.id=Director.movie_id and Person.id=Director.director_id 
+        and Movie.name='Avatar')
+    as a inner join
+    ( select Person.name as name from Movie, Director, Person
+        where Movie.id=Director.movie_id and Person.id=Director.director_id
+        and Movie.name='Avatar' )
+    as b on a.name=b.name;
++---------------+
+| name          |
++---------------+
+| James Cameron |
++---------------+
+
+
+7. What percentage of directors have directed at least two movies A and B, such that A and B have different genres?
+mysql> select name from (select Person.name, count(Person.name) as c from Director left join Person on Director.director_id=Person.id left join Movie on Director.movie_id=Movie.id group by Movie.genre, Person.name) as t where t.c > 1;
++--------------------+
+| name               |
++--------------------+
+| Barry Sonnenfeld   |
+| Brett Ratner       |
+| Sylvester Stallone |
+| Bryan Singer       |
+| Richard Donner     |
+| Sam Raimi          |
+| Steven Spielberg   |
+| Jay Roach          |
+| McG                |
+| Robert Rodriguez   |
+| Shawn Levy         |
+| Paul Greengrass    |
+| Andy Wachowski     |
+| Roland Emmerich    |
+| Martin Campbell    |
+| Gore Verbinski     |
+| Peter Jackson      |
+| George Lucas       |
+| Tim Story          |
+| James L. Brooks    |
+| Andy Tennant       |
+| Garry Marshall     |
+| Jay Roach          |
+| John Landis        |
+| Nancy Meyers       |
+| Peter Segal        |
+| Steven Soderbergh  |
+| Clint Eastwood     |
+| Wes Craven         |
+| Ron Howard         |
+| Ron Clements       |
+| Chris Columbus     |
+| John Lasseter      |
++--------------------+
+33 rows in set (0.00 sec)
+
+
+8. Find the names of all people who have won Oscars in two or more different categories (e.g., best actor and best director).
+mysql> select name from (select Person.name, count(distinct Oscar.type) as c from Person left join Oscar on Person.id=Oscar.person_id where Oscar.type is not null group by Person.name) as t where t.c>1;
++-----------------+
+| name            |
++-----------------+
+| Clint Eastwood  |
+| Jack Nicholson  |
+| James Cameron   |
+| James L. Brooks |
+| Robert Wise     |
++-----------------+
+5 rows in set (0.00 sec)
+
+
+9. Which of the top 20 gross-earning movies did not receive the best director Oscar?
+
+How to make this shorter?
+(select Movie.name, Movie.earnings_rank, Oscar.type from Movie left join Oscar on Movie.id=Oscar.movie_id where Movie.earnings_rank < 21) as t;
+
+Need to left outer join the following:
+select Movie.name, Movie.earnings_rank, Oscar.type from Movie left join Oscar on Movie.id=Oscar.movie_id where Movie.earnings_rank < 21 group by Movie.name;
+
+select Movie.name, Movie.earnings_rank, Oscar.type from Movie left join Oscar on Movie.id=Oscar.movie_id where Movie.earnings_rank < 21 and Oscar.type='BEST-DIRECTOR';
+
+
+
+10. Find all the directors with more than one movie in the top 50 grossing movies.
+mysql> select Person.name from Person right join (select Director.director_id, count(t.name) as c from Director right join (select Movie.name, Movie.earnings_rank, Movie.id from Movie where Movie.earnings_rank < 51) as t on Director.movie_id=t.id group by Director.director_id) as s on s.director_id=Person.id where s.c>1;
++------------------+
+| name             |
++------------------+
+| James Cameron    |
+| George Lucas     |
+| Steven Spielberg |
+| Sam Raimi        |
+| Michael Bay      |
+| Chris Columbus   |
+| Peter Jackson    |
+| Andrew Adamson   |
+| Gore Verbinski   |
+| David Yates      |
++------------------+
+10 rows in set (0.00 sec)
+
+
+11. Who was the youngest actor to win a Best Actor award? Do not use LIMIT (can you think of why using LIMIT could be a bad idea?).
+select name from (select Person.name, min(Person.dob) as m from Person right join (select Oscar.person_id from Oscar where Oscar.type='BEST-ACTOR') as t on t.person_id=Person.id) as s;
++---------------+
+| name          |
++---------------+
+| Marlon Brando |
++---------------+
+1 row in set (0.00 sec)
+
+
+12. Find all pairs of actors/actresses that share the same birthday (month and day; the year can vary).
+select a.name, b.name from (select Person.name, Person.dob from Person where Person.dob is not null group by Person.dob) as a inner join (select Person.name, Person.dob from Person where Person.dob is not null group by Person.dob) as b on DATE_FORMAT(a.dob, '%m%d')=DATE_FORMAT(b.dob, '%m%d') where a.name < b.name;
+| Piper Perabo                | Willow Smith                |
+| Eddie Kaye Thomas           | Willow Smith                |
+| Justin Chatwin              | Willow Smith                |
+| Joanna Cassidy              | Shelby Hoffman              |
+| Sam Worthington             | Shelby Hoffman              |
+| Edward Furlong              | Shelby Hoffman              |
++-----------------------------+-----------------------------+
+3284 rows in set (0.44 sec)
+
+
+13. Some friends of Professor Seltzer decided that they would use Netflix to learn more about movies through time. They are working their way through the decades watching all films that won one of the "big 6" Oscars in that decade. Produce a list of movie titles for them for the 70's.
+
+mysql> select Movie.name, Movie.year from Movie right join Oscar on Movie.id=Oscar.movie_id where Movie.year >1969 and Movie.year<1980 group by Movie.name;
++---------------------------------+------+
+| name                            | year |
++---------------------------------+------+
+| Airport                         | 1970 |
+| Kramer vs. Kramer               | 1979 |
+| One Flew Over the Cuckoo's Nest | 1975 |
+| Rocky                           | 1976 |
+| The Godfather                   | 1972 |
+| The Sting                       | 1973 |
++---------------------------------+------+
+6 rows in set (0.01 sec)
+
+
+14. Find all actors or actresses in the database who have a Bacon number of 2--i.e., they have not acted in a movie with Kevin Bacon, but they have acted in a movie with someone who has. For this question only, you may use multiple queries and store the results of the earlier queries in tables so that they can be used by the subsequent queries. These temporary tables should be dropped once the final result has been produced.
+
+Actors with their movies:
+select Person.name, Movie.name from Person left join Actor on Person.id=Actor.actor_id left join Movie on Actor.movie_id=Movie.id where Movie.name is not null order by Person.name;
+
+
+A: Actors who have not acted with Bacon
+
+B: Actors who have acted with Bacon
+
+A who have acted with anyone in B
